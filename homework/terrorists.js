@@ -1,5 +1,10 @@
 "use strict";
 
-class terrorists {
+//var bomb = require("./bomb");
 
+class terrorists {
+	plantBomb(bomb){
+
+		return true;
+	}
 }
