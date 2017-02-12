@@ -56,4 +56,28 @@ suite('When a round starts', function () {
 		// Assert
 		assert.equal(referenceResult, game.activeRound.roundNumber);
 	});
+
+	test('game status should be playing', function () {
+		// Arrage
+		let game = new GameModule.Game();
+		let referenceResult = GameModule.GameState.Playing
+
+		// Action
+		game.StartRound();
+
+		// Assert
+		assert.equal(referenceResult, game.gameState);
+	});
+
+	test('a bomb should be ready', function () {
+		// Arrage
+		let game = new GameModule.Game();
+		let referenceResult = BombModule.BombState.ready;
+
+		// Action
+		game.StartRound();
+
+		// Assert
+		assert.equal(referenceResult, game.activeRound.bombState);
+	});
 });

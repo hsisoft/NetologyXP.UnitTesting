@@ -17,8 +17,8 @@ const GameState = {
 const RoundState = {
 	'No_round' : 'no round',
 	'Running' : 'running',
-	'TerroristsWon' : 'terroristsWon',
-	'CounterTerroristsWon' : 'counterTerroristsWon',
+	'Finished_TerroristsWon' : 'finishedTerroristsWon',
+	'Finished_CounterTerroristsWon' : 'finishedCounterTerroristsWon',
 };
 
 module.exports.Game = class Game {
@@ -36,14 +36,23 @@ module.exports.Game = class Game {
 
 	// --- ROUND ---
 
-	StartRound(roundNumber){
+	StartRound(roundNumber) {
 		if (roundNumber === undefined){
 			this._activeRound = new module.exports.Round(1);
 		}
 		else {
 			this._activeRound = new module.exports.Round(roundNumber);
 		}
+		this._gameState = GameState.Playing;
 	};
+/*
+	EndRound(){
+		if (_activeRound !== undefined){
+			this._activeRound.EndRound();
+			this._roundPlayed++;
+			this._gameState = GameState.Idle;
+		}
+	};*/
 
 	get activeRound (){
 		return this._activeRound === undefined ? undefined : this._activeRound;
@@ -53,6 +62,9 @@ module.exports.Game = class Game {
 module.exports.Round = class Round {
 	constructor(roundNumber) {
 		this._roundNumber = roundNumber === undefined ? 1 : roundNumber;
+		this._bomb = new BombModule.Bomb();
+		this._terror = new TerroristModule.Terrorist();
+		this._counterTerror = new CounterTerroristModule.counterTerrorists();
 		this._roundState = RoundState.Running;
 	}
 
@@ -62,6 +74,29 @@ module.exports.Round = class Round {
 
 	get roundState (){
 		return this._roundState;
+	}
+
+	get bombState (){
+		return this._bomb.state;
+	};
+
+	get terroristsTeam (){
+		return this._terror;
+	};
+
+	get counterTerroristsTeam (){
+		return this._counterTerror;
+	};
+
+	EndRound(){
+		switch (this._bomb.bombState) {
+			case BombModule.BombState.planted:
+				this._roundState = RoundState.Finished_TerroristsWon;
+				break;
+			default:
+				this._roundState = RoundState.Finished_CounterTerroristsWon;
+				break;
+		}
 	}
 };
 
