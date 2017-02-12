@@ -84,7 +84,7 @@ suite('When a round starts', function () {
 	});
 });
 
-suite('When round ends and nothing happens', function () {
+suite('When the first round ends and nothing happens', function () {
 	test('then CT win', function () {
 		// Arrage
 		let game = new GameModule.Game();
@@ -97,9 +97,22 @@ suite('When round ends and nothing happens', function () {
 		// Assert
 		assert.equal(referenceResult, game.activeRound.roundState);
 	});
+
+	test('then score is 0 / 1', function () {
+		// Arrage
+		let game = new GameModule.Game();
+		let referenceResult = '0 / 1';
+
+		// Action
+		game.StartRound();
+		game.EndRound();
+
+		// Assert
+		assert.equal(referenceResult, game.score);
+	});
 });
 
-suite('When round ends and a bomb is planted', function () {
+suite('When the first round ends and a bomb is planted', function () {
 	test('then T win', function () {
 		// Arrage
 		let game = new GameModule.Game();
@@ -112,5 +125,19 @@ suite('When round ends and a bomb is planted', function () {
 
 		// Assert
 		assert.equal(referenceResult, game.activeRound.roundState);
+	});
+
+	test('then score is 1 / 0', function () {
+		// Arrage
+		let game = new GameModule.Game();
+		let referenceResult = '1 / 0';
+
+		// Action
+		game.StartRound();
+		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+		game.EndRound();
+
+		// Assert
+		assert.equal(referenceResult, game.score);
 	});
 });

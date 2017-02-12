@@ -32,6 +32,10 @@ module.exports.Game = class Game {
 
 	// --- GAME ---
 
+	get score(){
+		return this._roundsTerroristsWon + ' / ' + this._roundsCounterTerroristsWon;
+	}
+
 	get gameState (){
 		return this._gameState;
 	};
@@ -52,6 +56,12 @@ module.exports.Game = class Game {
 		if (this._activeRound !== undefined){
 			this._activeRound.EndRound();
 			this._roundPlayed++;
+			if (this._activeRound.roundState === RoundState.Finished_TerroristsWon){
+				this._roundsTerroristsWon++;
+			}
+			if (this._activeRound.roundState === RoundState.Finished_CounterTerroristsWon){
+				this._roundsCounterTerroristsWon++;
+			}
 			this._gameState = GameState.Idle;
 		}
 	};
