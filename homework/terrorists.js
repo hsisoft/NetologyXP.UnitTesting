@@ -1,10 +1,15 @@
 "use strict";
 
-//var bomb = require("./bomb");
+//const BombModule = require('../homework/bomb');
 
-class terrorists {
+module.exports.Terrorist = class terrorists {
 	plantBomb(bomb){
+		if (bomb === undefined){
+			return false;
+		}
 
-		return true;
+		let _bomb = bomb;
+		_bomb.plant();
+		return _bomb.state;
 	}
 }
