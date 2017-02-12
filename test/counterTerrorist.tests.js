@@ -10,6 +10,7 @@ suite('When a counterTerrorist', function () {
 		let counterTerror = new CounterTerroristModule.counterTerrorists();
 		let bomb = new BombModule.Bomb();
 		let referenceResult = BombModule.BombState.defused;
+		bomb.plant();
 
         // Act
         counterTerror.defuseBomb(bomb);

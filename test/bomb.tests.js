@@ -9,7 +9,7 @@ suite('Bomb should', function () {
 		let bomb = new BombModule.Bomb();
 		let referenceResult = BombModule.BombState.ready;
 
-        // Act
+        // Missed Action Scheme
         // no actions needed
 
         // Assert
@@ -47,6 +47,23 @@ suite('Bomb should', function () {
 
 		// Act
 		bomb.defuse();
+
+		// Assert
+		assert.equal(referenceResult, bomb.state);
+	});
+});
+
+suite('When the bomb is planted for a second time', function () {
+	test('nothing happens', function () {
+		// Arrage
+		let bomb = new BombModule.Bomb(BombModule.BombState.planted);
+		let referenceResult = BombModule.BombState.defused;
+
+		bomb.plant();
+		bomb.defuse();
+
+		// Act
+		bomb.plant();
 
 		// Assert
 		assert.equal(referenceResult, bomb.state);

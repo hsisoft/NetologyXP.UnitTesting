@@ -16,11 +16,15 @@ module.exports.Bomb = class Bomb{
 	}
 
 	plant (){
-		this._bombState = BombState.planted;
+		if (this._bombState === BombState.ready) {
+			this._bombState = BombState.planted;
+		}
 	}
 
 	defuse(){
-		this._bombState = BombState.defused;
+		if (this._bombState === BombState.planted) {
+			this._bombState = BombState.defused;
+		}
 	}
 };
 
