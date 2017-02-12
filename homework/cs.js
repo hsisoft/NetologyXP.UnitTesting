@@ -12,6 +12,8 @@ const GameRules = {
 const GameState = {
 	'Idle' : 'idle',
 	'Playing' : 'playing',
+	'Finished_TerroristsWon' : 'finishedTerroristsWon',
+	'Finished_CounterTerroristsWon' : 'finishedCounterTerroristsWon',
 };
 
 const RoundState = {
@@ -43,25 +45,38 @@ module.exports.Game = class Game {
 	// --- ROUND ---
 
 	StartRound(roundNumber) {
-		if (roundNumber === undefined){
-			this._activeRound = new module.exports.Round(this._roundPlayed + 1);
+		if ((this._gameState !== GameState.Finished_TerroristsWon) && (this._gameState !== GameState.Finished_TerroristsWon)){
+			if (roundNumber === undefined) {
+				this._activeRound = new module.exports.Round(this._roundPlayed + 1);
+			}
+			else {
+				this._activeRound = new module.exports.Round(roundNumber);
+			}
+			this._gameState = GameState.Playing;
 		}
-		else {
-			this._activeRound = new module.exports.Round(roundNumber);
-		}
-		this._gameState = GameState.Playing;
 	};
 
 	EndRound(){
-		if (this._activeRound !== undefined){
+		if (this._gameState !== GameState.Idle) {
 			this._activeRound.EndRound();
 			this._roundPlayed++;
-			if (this._activeRound.roundState === RoundState.Finished_TerroristsWon){
+
+			if (this._activeRound.roundState === RoundState.Finished_TerroristsWon) {
 				this._roundsTerroristsWon++;
 			}
-			if (this._activeRound.roundState === RoundState.Finished_CounterTerroristsWon){
+			if (this._activeRound.roundState === RoundState.Finished_CounterTerroristsWon) {
 				this._roundsCounterTerroristsWon++;
 			}
+
+			if (this._roundsTerroristsWon >= 2){
+				this._gameState = GameState.Finished_TerroristsWon;
+				return;
+			}
+			if (this._roundsCounterTerroristsWon >= 2){
+				this._gameState = GameState.Finished_CounterTerroristsWon;
+				return;
+			}
+
 			this._gameState = GameState.Idle;
 		}
 	};

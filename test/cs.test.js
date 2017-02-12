@@ -141,3 +141,77 @@ suite('When the first round ends and a bomb is planted', function () {
 		assert.equal(referenceResult, game.score);
 	});
 });
+
+suite('When the first round ends and a bomb is defused', function () {
+	test('then CT win', function () {
+		// Arrage
+		let game = new GameModule.Game();
+		let referenceResult = GameModule.RoundState.Finished_CounterTerroristsWon;
+
+		// Action
+		game.StartRound();
+		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+		game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
+		game.EndRound();
+
+		// Assert
+		assert.equal(referenceResult, game.activeRound.roundState);
+	});
+
+	test('then score is 0 / 1', function () {
+		// Arrage
+		let game = new GameModule.Game();
+		let referenceResult = '0 / 1';
+
+		// Action
+		game.StartRound();
+		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+		game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
+		game.EndRound();
+
+		// Assert
+		assert.equal(referenceResult, game.score);
+	});
+});
+
+suite('When CT win for the second time', function () {
+	test('then CT win a game', function () {
+		// Arrage
+		let game = new GameModule.Game();
+		let referenceResult = GameModule.GameState.Finished_CounterTerroristsWon;
+
+		// Action
+		game.StartRound();
+		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+		game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
+		game.EndRound();
+
+		game.StartRound();
+		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+		game.activeRound.counterTerroristsTeam.defuseBomb(game.activeRound.bomb);
+		game.EndRound();
+
+		// Assert
+		assert.equal(referenceResult, game.gameState);
+	});
+});
+
+suite('When T win for the second time', function () {
+	test('then T win a game', function () {
+		// Arrage
+		let game = new GameModule.Game();
+		let referenceResult = GameModule.GameState.Finished_TerroristsWon;
+
+		// Action
+		game.StartRound();
+		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+		game.EndRound();
+
+		game.StartRound();
+		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+		game.EndRound();
+
+		// Assert
+		assert.equal(referenceResult, game.gameState);
+	});
+});
