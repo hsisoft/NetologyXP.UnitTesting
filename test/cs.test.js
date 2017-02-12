@@ -21,12 +21,14 @@ suite('When a game starts', function () {
 });
 
 suite('When a round starts', function () {
-	test('w/o round number - its number should be 1', function () {
+	test('w/o round number - its number should be increased', function () {
 		// Arrage
 		let game = new GameModule.Game();
-		let referenceResult = 1;
+		let referenceResult = 2;
 
 		// Action
+		game.StartRound();
+		game.EndRound();
 		game.StartRound();
 
 		// Assert
@@ -78,6 +80,37 @@ suite('When a round starts', function () {
 		game.StartRound();
 
 		// Assert
-		assert.equal(referenceResult, game.activeRound.bombState);
+		assert.equal(referenceResult, game.activeRound.bomb.state);
+	});
+});
+
+suite('When round ends and nothing happens', function () {
+	test('then CT win', function () {
+		// Arrage
+		let game = new GameModule.Game();
+		let referenceResult = GameModule.RoundState.Finished_CounterTerroristsWon;
+
+		// Action
+		game.StartRound();
+		game.EndRound();
+
+		// Assert
+		assert.equal(referenceResult, game.activeRound.roundState);
+	});
+});
+
+suite('When round ends and a bomb is planted', function () {
+	test('then T win', function () {
+		// Arrage
+		let game = new GameModule.Game();
+		let referenceResult = GameModule.RoundState.Finished_TerroristsWon;
+
+		// Action
+		game.StartRound();
+		game.activeRound.terroristsTeam.plantBomb(game.activeRound.bomb);
+		game.EndRound();
+
+		// Assert
+		assert.equal(referenceResult, game.activeRound.roundState);
 	});
 });

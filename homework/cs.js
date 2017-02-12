@@ -26,6 +26,8 @@ module.exports.Game = class Game {
 		this._roundPlayed = 0;
 		this._activeRound = new module.exports.Round();
 		this._gameState = GameState.Idle;
+		this._roundsTerroristsWon = 0;
+		this._roundsCounterTerroristsWon = 0;
 	};
 
 	// --- GAME ---
@@ -38,21 +40,21 @@ module.exports.Game = class Game {
 
 	StartRound(roundNumber) {
 		if (roundNumber === undefined){
-			this._activeRound = new module.exports.Round(1);
+			this._activeRound = new module.exports.Round(this._roundPlayed + 1);
 		}
 		else {
 			this._activeRound = new module.exports.Round(roundNumber);
 		}
 		this._gameState = GameState.Playing;
 	};
-/*
+
 	EndRound(){
-		if (_activeRound !== undefined){
+		if (this._activeRound !== undefined){
 			this._activeRound.EndRound();
 			this._roundPlayed++;
 			this._gameState = GameState.Idle;
 		}
-	};*/
+	};
 
 	get activeRound (){
 		return this._activeRound === undefined ? undefined : this._activeRound;
@@ -76,8 +78,8 @@ module.exports.Round = class Round {
 		return this._roundState;
 	}
 
-	get bombState (){
-		return this._bomb.state;
+	get bomb (){
+		return this._bomb;
 	};
 
 	get terroristsTeam (){
@@ -89,7 +91,7 @@ module.exports.Round = class Round {
 	};
 
 	EndRound(){
-		switch (this._bomb.bombState) {
+		switch (this._bomb.state) {
 			case BombModule.BombState.planted:
 				this._roundState = RoundState.Finished_TerroristsWon;
 				break;
@@ -102,3 +104,4 @@ module.exports.Round = class Round {
 
 module.exports.GameRules = GameRules;
 module.exports.GameState = GameState;
+module.exports.RoundState = RoundState;
